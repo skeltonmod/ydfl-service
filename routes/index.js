@@ -1,3 +1,5 @@
+var express = require("express");
+var router = express.Router();
 const ytdl = require("ytdl-core");
 const ffmpeg = require("fluent-ffmpeg");
 const pathToFfmpeg = require("ffmpeg-static");
@@ -6,7 +8,9 @@ const fs = require("fs");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-	@@ -12,20 +14,49 @@ router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" });
+});
+
 router.get("/fetch-video/:id", async function (req, res, next) {
   const id = req.params.id;
   const url = `https://www.youtube.com/watch?v=${id}`;
@@ -38,16 +42,17 @@ router.get("/fetch-video/:id", async function (req, res, next) {
         if (err) {
           console.error(err);
           res.status(500).send("Error sending file");
-        } else {
-          // Delete the file after it has been sent
-          fs.unlink(outputFilePath, (unlinkErr) => {
-            if (unlinkErr) {
-              console.error(unlinkErr);
-            } else {
-              console.log("File deleted");
-            }
-          });
-        }
+        } 
+	// else {
+ //          // Delete the file after it has been sent
+ //          fs.unlink(outputFilePath, (unlinkErr) => {
+ //            if (unlinkErr) {
+ //              console.error(unlinkErr);
+ //            } else {
+ //              console.log("File deleted");
+ //            }
+ //          });
+ //        }
       });
     })
     .pipe(outputStream, {
